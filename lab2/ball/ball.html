@@ -8,9 +8,10 @@
     <title>Canvas</title>
 
     <style type="text/css">
-      body {
-          background-color: white;
-      }
+      canvas {
+ border: black 3px solid;
+ 
+}
     </style>
 
   </head>
@@ -22,6 +23,9 @@
     <script type="text/javascript">
       // Gets a handle to the element with id canvasOne.
       var canvas = document.getElementById("canvas-for-ball");
+      //resize canvas
+      canvas.width  = 890; // in pixels
+      canvas.height = 1000; // in pixels
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
       
