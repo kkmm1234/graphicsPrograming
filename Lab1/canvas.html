@@ -21,70 +21,70 @@
     <canvas id="canvasOne"></canvas>
     
     <script type="text/javascript">
-        canvasOne.width  = 890; // in pixels
-        canvasOne.height = 1000; // in pixels
-		// Gets a handle to the element with id canvasOne.
-		var c = document.getElementById("canvasOne");
-		// Set the canvas up for drawing in 2D.
-		var ctx = c.getContext("2d");
-		// Set the fill colour to bright red.
-		
+      canvasOne.width  = 890; // in pixels
+      canvasOne.height = 1000; // in pixels
+      // Gets a handle to the element with id canvasOne.
+      var c = document.getElementById("canvasOne");
+      // Set the canvas up for drawing in 2D.
+      var ctx = c.getContext("2d");
+      // Set the fill colour to bright red.
+      
+          
+      // Create a filled rectangle 
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(0, 200, 0, .5)";
+      ctx.fillRect(20, 20, 150, 100);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(0, 0, 100, .4)";
+      ctx.fillRect(30, 30, 150, 100);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(0, 0, 100, .4)";
+      ctx.arc(100, 200, 50, 0, Math.PI *2);
+      ctx.strokeStyle = "red";
+      ctx.stroke();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(300, 0, 100, .4)";
+      ctx.arc(220, 200, 50, 0, Math.PI *2);
+      ctx.strokeStyle = "green";
+      ctx.stroke();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.font = "50px serif";
+      ctx.strokeStyle = "pink";
+      ctx.strokeText("Keith", 200, 100)
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(0, 100, 100, .4)";
+      ctx.arc(330, 200, 50, 0, Math.PI);
+      ctx.strokeStyle = "green";
+      ctx.stroke();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(200, 0, 0, 1)";
+      ctx.fillRect(300, 300, 165, 300);
+      ctx.stroke();
         
-		// Create a filled rectangle 
-		ctx.beginPath();
-        ctx.fillStyle = "rgba(0, 200, 0, .5)";
-        ctx.fillRect(20, 20, 150, 100);
-        ctx.stroke();
+      ctx.beginPath();
+      ctx.strokeStyle = 'black';
+      ctx.strokeRect(300, 300, 165, 150);
 
-        ctx.beginPath();
-        ctx.fillStyle = "rgba(0, 0, 100, .4)";
-        ctx.fillRect(30, 30, 150, 100);
-        ctx.stroke();
+      ctx.beginPath();
+      ctx.strokeStyle = 'black';
+      ctx.strokeRect(300, 450, 165, 150);
 
-        ctx.beginPath();
-        ctx.fillStyle = "rgba(0, 0, 100, .4)";
-        ctx.arc(100, 200, 50, 0, Math.PI *2);
-        ctx.strokeStyle = "red";
-        ctx.stroke();
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.fillStyle = "rgba(300, 0, 100, .4)";
-        ctx.arc(220, 200, 50, 0, Math.PI *2);
-        ctx.strokeStyle = "green";
-        ctx.stroke();
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.font = "50px serif";
-        ctx.strokeStyle = "pink";
-        ctx.strokeText("Keith", 200, 100)
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.fillStyle = "rgba(0, 100, 100, .4)";
-        ctx.arc(330, 200, 50, 0, Math.PI);
-        ctx.strokeStyle = "green";
-        ctx.stroke();
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.fillStyle = "rgba(200, 0, 0, 1)";
-        ctx.fillRect(300, 300, 165, 300);
-        ctx.stroke();
-       
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.strokeRect(300, 300, 165, 150);
-
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.strokeRect(300, 450, 165, 150);
-
-        ctx.beginPath();
-        ctx.arc(382.5, 450, 30, 0, Math.PI *2);
-        ctx.strokeStyle = "black";
-        ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(382.5, 450, 30, 0, Math.PI *2);
+      ctx.strokeStyle = "black";
+      ctx.stroke();
         
         
     </script>
