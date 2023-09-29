@@ -31,15 +31,29 @@
       
       // The vertical location of the ball.
       var y = 10;
+      var yVelocity = 1;
+      var radius = 50;
       // A function to repeat every time the animation loops.
       function repeatme() {
+        //clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Draw the ball (stroked, not filled).
         ctx.beginPath();
         ctx.arc(50, y, 3, 0, 2 * Math.PI);
         ctx.stroke();
         
         // Update the y location.
-        y += 1;
+        y += yVelocity;
+
+        //check if ball hits bottom
+        if(y > 150-radius){
+          //change velocity make it go up
+          yVelocity *= 1.1;
+        }
+
+        if(y < 0){
+          yVelocity *= 1.1;
+        }
         
         window.requestAnimationFrame(repeatme);
       }
