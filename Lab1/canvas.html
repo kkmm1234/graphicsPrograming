@@ -67,6 +67,24 @@
         ctx.strokeStyle = "green";
         ctx.stroke();
         ctx.fill();
+
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(200, 0, 0, 1)";
+        ctx.fillRect(300, 300, 165, 300);
+        ctx.stroke();
+       
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.strokeRect(300, 300, 165, 150);
+
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.strokeRect(300, 450, 165, 150);
+
+        ctx.beginPath();
+        ctx.arc(382.5, 450, 30, 0, Math.PI *2);
+        ctx.strokeStyle = "black";
+        ctx.stroke();
         
         
     </script>
