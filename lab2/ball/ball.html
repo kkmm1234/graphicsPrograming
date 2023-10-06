@@ -1,77 +1,83 @@
-
 <!DOCTYPE html>
-
 <html>
 
-  <head>
-    <meta charset="UTF-8">
-    <title>Canvas</title>
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas</title>
+  <style type="text/css">
+    canvas {
+      border: black 3px solid;
+    }
+  </style>
+</head>
 
-    <style type="text/css">
-      canvas {
-       border: black 3px solid;
- 
+<body>
+  <h1>KEITH</h1>
+  <canvas id="canvas-for-ball"></canvas>
+  <script type="text/javascript">
+    class Ball {
+      constructor(x, y, xspeed, yspeed) {
+        this.x = x;
+        this.y = y;
+        this.xspeed = xspeed;
+        this.yspeed = yspeed;
       }
-    </style>
-
-  </head>
-
-  <body>
-    <h1>KEITH</h1>
-    <canvas id="canvas-for-ball"></canvas>
-    <script type="text/javascript">
-      class ball{
-        constructor(x , y ,xspeed, yspeed){
-          this.x = x;
-          this.y = y;
-          this.xspeed = xspeed;
-          this.yspeed = yspeed;
+      drawball() {
+        // Draw the ball (stroked, not filled).
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 3, 0, 2 * Math.PI); // Fixed the arc method.
+        ctx.stroke();
+      }
+      moveBall() {
+        this.y += this.yspeed;
+        // Check if ball hits bottom
+        if (this.y > canvas.height) {
+          // Change velocity to make it go up
+          this.yspeed *= -1;
         }
-        drawball(){
-          // Draw the ball (stroked, not filled).
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, 3,  2 * Math.PI);
-          ctx.stroke();
-        
-        }
-        moveBall(){
-          this.y += this.yspeed;
-          //check if ball hits bottom
-          if(this.y > canvas.height){
-            //change velocity make it go up
-            y.speed *= -1;
-          }
 
-          if(this.y < 0){
-            y.speed *= 1;
-          }
+         if (this.y < 0) {
+          // Change velocity to make it go down
+          this.yspeed *= -1;
+        }
+        this.x += this.xspeed;
+        if (this.x > canvas.width) {
+          // Change velocity to make it go up
+          this.xspeed *= -1;
+        }
+
+         if (this.x < 0) {
+          // Change velocity to make it go down
+          this.xspeed *= -1;
         }
       }
-      // Gets a handle to the element with id canvasOne.
-      var canvas = document.getElementById("canvas-for-ball");
+    }
 
-      //resize canvas
-      canvas.width  = 500; // in pixels
-      canvas.height = 500; // in pixels
-      // Get a 2D context for the canvas.
-      var ctx = canvas.getContext("2d");
+    // Gets a handle to the element with id canvas-for-ball.
+    var canvas = document.getElementById("canvas-for-ball");
 
-      newBall = new ball (50, 50, 3, 2);
+    // Resize canvas
+    canvas.width = 500; // in pixels
+    canvas.height = 500; // in pixels
+    // Get a 2D context for the canvas.
+    var ctx = canvas.getContext("2d");
 
-      function repeatme() {
-        //clear canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        drawball();
-        moveBall();
-      }
+    var newBall = new Ball(50, 50, 3, 2);
+
+    function repeatme() {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      newBall.drawball();
+      newBall.moveBall();
       
       // Get the animation going.
-      repeatme();
       window.requestAnimationFrame(repeatme);
+    }
 
-    </script>
-
-  </body>
+    // Start the animation loop.
+    repeatme();
+  </script>
+</body>
 
 </html>
