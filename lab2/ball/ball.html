@@ -16,38 +16,55 @@
   <canvas id="canvas-for-ball"></canvas>
   <script type="text/javascript">
     class Ball {
-      constructor(x, y, xspeed, yspeed) {
+      constructor(x, y, xspeed, yspeed, radius) {
         this.x = x;
         this.y = y;
         this.xspeed = xspeed;
         this.yspeed = yspeed;
+        this.radius = radius; // Added radius property
       }
-      drawball() {
-        // Draw the ball (stroked, not filled).
+      drawBall() {
+        // Draw the prohibition symbol (circle with a diagonal line)
         ctx.beginPath();
-        ctx.arc(this.x, this.y, 3, 0, 2 * Math.PI); // Fixed the arc method.
+
+        // Draw the circle
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 3;
         ctx.stroke();
+
+        // Calculate polar coordinates for diagonal lines
+        const angle1 = Math.PI / 4; // 45 degrees
+        const angle2 = (3 * Math.PI) / 4; // 135 degrees
+        const lineLength = this.radius; // Length of the lines
+
+        // Convert polar coordinates to Cartesian coordinates
+        const x1 = this.x + lineLength * Math.cos(angle1);
+        const y1 = this.y + lineLength * Math.sin(angle1);
+        const x2 = this.x + lineLength * Math.cos(angle2);
+        const y2 = this.y + lineLength * Math.sin(angle2);
+
+        // Draw the diagonal lines
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(x1, y1);
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(x2, y2);
+
+        ctx.stroke();
+        ctx.closePath();
       }
       moveBall() {
         this.y += this.yspeed;
         // Check if ball hits bottom
-        if (this.y > canvas.height) {
-          // Change velocity to make it go up
+        if (this.y > canvas.height - this.radius || this.y < this.radius) {
+          // Change velocity to make it bounce
           this.yspeed *= -1;
         }
 
-         if (this.y < 0) {
-          // Change velocity to make it go down
-          this.yspeed *= -1;
-        }
         this.x += this.xspeed;
-        if (this.x > canvas.width) {
-          // Change velocity to make it go up
-          this.xspeed *= -1;
-        }
-
-         if (this.x < 0) {
-          // Change velocity to make it go down
+        // Check if ball hits left or right
+        if (this.x > canvas.width - this.radius || this.x < this.radius) {
+          // Change velocity to make it bounce
           this.xspeed *= -1;
         }
       }
@@ -62,15 +79,15 @@
     // Get a 2D context for the canvas.
     var ctx = canvas.getContext("2d");
 
-    var newBall = new Ball(50, 50, 3, 2);
+    var newBall = new Ball(50, 50, 3, 2, 20); // Added radius parameter
 
     function repeatme() {
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      newBall.drawball();
+      newBall.drawBall();
       newBall.moveBall();
-      
+
       // Get the animation going.
       window.requestAnimationFrame(repeatme);
     }
