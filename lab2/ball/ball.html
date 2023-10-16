@@ -21,37 +21,39 @@
         this.y = y;
         this.xspeed = xspeed;
         this.yspeed = yspeed;
-        this.radius = radius; // Added radius property
+        this.radius = radius;
+        this.angle = 0; // Initial angle
       }
       drawBall() {
-        // Draw the prohibition symbol (circle with a diagonal line)
-        ctx.beginPath();
+        // Draw the prohibition symbol (circle with diagonal lines)
+        ctx.save(); // Save the current context state
+        ctx.translate(this.x, this.y); // Translate to the ball's position
+        ctx.rotate(this.angle); // Rotate the context by the current angle
 
         // Draw the circle
-        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
         ctx.strokeStyle = 'red';
         ctx.lineWidth = 3;
         ctx.stroke();
 
-        // Calculate polar coordinates for diagonal lines
-        const angle1 = Math.PI / 4; // 45 degrees
-        const angle2 = (3 * Math.PI) / 4; // 135 degrees
-        const lineLength = this.radius; // Length of the lines
-
-        // Convert polar coordinates to Cartesian coordinates
-        const x1 = this.x + lineLength * Math.cos(angle1);
-        const y1 = this.y + lineLength * Math.sin(angle1);
-        const x2 = this.x + lineLength * Math.cos(angle2);
-        const y2 = this.y + lineLength * Math.sin(angle2);
+        // Calculate endpoints of the diagonal lines
+        const angles = [Math.PI / 4, -Math.PI / 4, -3 * Math.PI / 4, 3 * Math.PI / 4, -5 * Math.PI / 4, 5 * Math.PI / 4];
+        const endpoints = angles.map(angle => ({
+          x: this.radius * Math.cos(angle),
+          y: this.radius * Math.sin(angle)
+        }));
 
         // Draw the diagonal lines
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(x1, y1);
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(x2, y2);
+        for (let i = 0; i < endpoints.length; i += 2) {
+          ctx.moveTo(0, 0);
+          ctx.lineTo(endpoints[i].x, endpoints[i].y);
+          ctx.moveTo(0, 0);
+          ctx.lineTo(endpoints[i + 1].x, endpoints[i + 1].y);
+        }
 
         ctx.stroke();
-        ctx.closePath();
+        ctx.restore(); // Restore the saved context state
       }
       moveBall() {
         this.y += this.yspeed;
@@ -67,6 +69,8 @@
           // Change velocity to make it bounce
           this.xspeed *= -1;
         }
+
+        this.angle += 0.02; // Increase the angle to make the ball rotate
       }
     }
 
@@ -79,7 +83,7 @@
     // Get a 2D context for the canvas.
     var ctx = canvas.getContext("2d");
 
-    var newBall = new Ball(50, 50, 3, 2, 20); // Added radius parameter
+    var newBall = new Ball(250, 250, 3, 2, 20); // Adjusted the position and radius
 
     function repeatme() {
       // Clear canvas
