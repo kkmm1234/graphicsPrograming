@@ -13,78 +13,107 @@
   <canvas id="gameCanvas"></canvas>
   <script>
     const canvas = document.getElementById("gameCanvas");
+    canvas.height = 600;
+    canvas.width = 800;
     const ctx = canvas.getContext("2d");
 
     // Paddle properties
-    const paddleWidth = 100;
-    const paddleHeight = 20;
-    let paddleX = (canvas.width - paddleWidth) / 2;
-    const paddleY = canvas.height - paddleHeight - 10;
-    let paddleSpeed = 5;
+    const paddleWidth = 20;
+    const paddleHeight = 100;
+    const paddleSpeed = 5;
 
-    // Mouse controls
-    let mouseX = 0;
+    // Paddle 1 (left side, controlled by mouse and arrow keys)
+    let paddle1X = 10;
+    let paddle1Y = (canvas.height - paddleHeight) / 2;
+    let mouseY1 = paddle1Y; // Initialize mouseY1 to paddle1Y
+    let upPressed1 = false;
+    let downPressed1 = false;
 
-    // Arrow key controls
-    let leftPressed = false;
-    let rightPressed = false;
+    // Paddle 2 (right side, controlled by "8" and "2" keys)
+    let paddle2X = canvas.width - paddleWidth - 10;
+    let paddle2Y = (canvas.height - paddleHeight) / 2;
+    let upPressed2 = false;
+    let downPressed2 = false;
 
-    // Event listeners for arrow keys
-    document.addEventListener("keydown", keyDownHandler);
-    document.addEventListener("keyup", keyUpHandler);
+    // Event listener for mouse movement (Paddle 1)
+    document.addEventListener("mousemove", mouseMoveHandler1);
 
-    function keyDownHandler(e) {
-        if (e.key === "ArrowRight") {
-            rightPressed = true;
-        } 
-        else if (e.key === "ArrowLeft") {
-            leftPressed = true;
-        }
-    }
-
-    function keyUpHandler(e) {
-        if (e.key === "ArrowRight") {
-            rightPressed = false;
-        } 
-        else if (e.key === "ArrowLeft") {
-            leftPressed = false;
-        }
-    }
-
-    // Event listener for mouse movement
-    document.addEventListener("mousemove", mouseMoveHandler);
-
-    function mouseMoveHandler(e) {
-      const relativeX = e.clientX - canvas.offsetLeft;
-      if (relativeX > 0 && relativeX < canvas.width) {
-        mouseX = relativeX;
+    function mouseMoveHandler1(e) {
+      const relativeY = e.clientY - canvas.offsetTop;
+      if (relativeY > 0 && relativeY < canvas.height) {
+        mouseY1 = relativeY;
       }
     }
 
-    function drawPaddle() {
+    // Event listeners for arrow keys (Paddle 1)
+    document.addEventListener("keydown", keyDownHandler1);
+    document.addEventListener("keyup", keyUpHandler1);
+
+    function keyDownHandler1(e) {
+      if (e.key === "ArrowDown") { // Move Paddle 1 down
+        downPressed1 = true;
+      } else if (e.key === "ArrowUp") { // Move Paddle 1 up
+        upPressed1 = true;
+      }
+    }
+
+    function keyUpHandler1(e) {
+      if (e.key === "ArrowDown") {
+        downPressed1 = false;
+      } else if (e.key === "ArrowUp") {
+        upPressed1 = false;
+      }
+    }
+
+    // Event listeners for "8" and "2" keys (Paddle 2)
+    document.addEventListener("keydown", keyDownHandler2);
+    document.addEventListener("keyup", keyUpHandler2);
+
+    function keyDownHandler2(e) {
+      if (e.key === "2") { // Move Paddle 2 down
+        downPressed2 = true;
+      } else if (e.key === "8") { // Move Paddle 2 up
+        upPressed2 = true;
+      }
+    }
+
+    function keyUpHandler2(e) {
+      if (e.key === "2") {
+        downPressed2 = false;
+      } else if (e.key === "8") {
+        upPressed2 = false;
+      }
+    }
+
+    function drawPaddle(x, y) {
       ctx.beginPath();
-      ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
+      ctx.rect(x, y, paddleWidth, paddleHeight);
       ctx.fillStyle = "blue";
       ctx.fill();
       ctx.closePath();
     }
 
-    function updatePaddlePosition() {
-      if (rightPressed && paddleX + paddleWidth < canvas.width) {
-        paddleX += paddleSpeed;
+    function updatePaddlePositions() {
+      if (downPressed1 && mouseY1 + paddleHeight < canvas.height) {
+        mouseY1 += paddleSpeed;
       }
-      if (leftPressed && paddleX > 0) {
-        paddleX -= paddleSpeed;
+      if (upPressed1 && mouseY1 > 0) {
+        mouseY1 -= paddleSpeed;
       }
-      if (mouseX - paddleWidth / 2 > 0 && mouseX + paddleWidth / 2 < canvas.width) {
-        paddleX = mouseX - paddleWidth / 2;
+
+      if (downPressed2 && paddle2Y + paddleHeight < canvas.height) {
+        paddle2Y += paddleSpeed;
+      }
+      if (upPressed2 && paddle2Y > 0) {
+        paddle2Y -= paddleSpeed;
       }
     }
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawPaddle();
-      updatePaddlePosition();
+      drawPaddle(paddle1X, mouseY1);
+      drawPaddle(paddle2X, paddle2Y);
+      updatePaddlePositions();
       requestAnimationFrame(draw);
     }
 
