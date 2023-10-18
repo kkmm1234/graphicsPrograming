@@ -117,7 +117,89 @@
       requestAnimationFrame(draw);
     }
 
-    draw();
+    class Ball {
+      constructor(x, y, xspeed, yspeed, radius) {
+        this.x = x;
+        this.y = y;
+        this.xspeed = xspeed;
+        this.yspeed = yspeed;
+        this.radius = radius;
+        this.angle = 0; // Initial angle
+        this.rotationDirection = 1; // 1 for clockwise, -1 for counter-clockwise
+      }
+      drawBall() {
+        // Draw the prohibition symbol (circle with diagonal lines)
+        ctx.save(); // Save the current context state
+        ctx.translate(this.x, this.y); // Translate to the ball's position
+        ctx.rotate(this.angle); // Rotate the context by the current angle
+
+        // Draw the circle
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Calculate endpoints of the diagonal lines
+        const angles = [Math.PI / 4, -Math.PI / 4, -3 * Math.PI / 4, 3 * Math.PI / 4, -5 * Math.PI / 4, 5 * Math.PI / 4];
+        const endpoints = angles.map(angle => ({
+          x: this.radius * Math.cos(angle),
+          y: this.radius * Math.sin(angle)
+        }));
+
+        // Draw the diagonal lines
+        for (let i = 0; i < endpoints.length; i += 2) {
+          ctx.moveTo(0, 0);
+          ctx.lineTo(endpoints[i].x, endpoints[i].y);
+          ctx.moveTo(0, 0);
+          ctx.lineTo(endpoints[i + 1].x, endpoints[i + 1].y);
+        }
+
+        ctx.stroke();
+        ctx.restore(); // Restore the saved context state
+      }
+      moveBall() {
+        this.y += this.yspeed;
+        // Check if ball hits the top or bottom
+        if (this.y > canvas.height - this.radius || this.y < this.radius) {
+          // Change velocity to make it bounce
+          this.yspeed *= -1;
+
+          // Change rotation direction
+          this.rotationDirection *= -1;
+        }
+
+        this.x += this.xspeed;
+        // Check if ball hits left or right
+        if (this.x > canvas.width - this.radius || this.x < this.radius) {
+          // Change velocity to make it bounce
+          this.xspeed *= -1;
+
+          // Change rotation direction
+          this.rotationDirection *= -1;
+        }
+
+        this.angle += 0.02 * this.rotationDirection; // Increase the angle to make the ball rotate
+      }
+    }
+
+    var newBall = new Ball(250, 250, 3, 2, 20); // Adjusted the position and radius
+
+    function repeatme() {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawPaddle(paddle1X, mouseY1);
+      drawPaddle(paddle2X, paddle2Y);
+      updatePaddlePositions();
+      newBall.drawBall();
+      newBall.moveBall();
+
+      // Get the animation going.
+      window.requestAnimationFrame(repeatme);
+    }
+
+    // Start the animation loop.
+    repeatme();
   </script>
 </body>
 </html>
