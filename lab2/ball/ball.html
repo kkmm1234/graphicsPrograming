@@ -23,6 +23,7 @@
         this.yspeed = yspeed;
         this.radius = radius;
         this.angle = 0; // Initial angle
+        this.rotationDirection = 1; // 1 for clockwise, -1 for counter-clockwise
       }
       drawBall() {
         // Draw the prohibition symbol (circle with diagonal lines)
@@ -57,10 +58,13 @@
       }
       moveBall() {
         this.y += this.yspeed;
-        // Check if ball hits bottom
+        // Check if ball hits the top or bottom
         if (this.y > canvas.height - this.radius || this.y < this.radius) {
           // Change velocity to make it bounce
           this.yspeed *= -1;
+
+          // Change rotation direction
+          this.rotationDirection *= -1;
         }
 
         this.x += this.xspeed;
@@ -68,9 +72,12 @@
         if (this.x > canvas.width - this.radius || this.x < this.radius) {
           // Change velocity to make it bounce
           this.xspeed *= -1;
+
+          // Change rotation direction
+          this.rotationDirection *= -1;
         }
 
-        this.angle += 0.02; // Increase the angle to make the ball rotate
+        this.angle += 0.02 * this.rotationDirection; // Increase the angle to make the ball rotate
       }
     }
 
