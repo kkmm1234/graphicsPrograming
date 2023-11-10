@@ -108,7 +108,7 @@
 
     var newBall = new Ball(250, 250, 3, 2, 20); // Adjusted the position and radius
     var newPaddle = new Paddle(50, 50, 150, 30);
-    var newPaddle2 = new Paddle(200, 50, 150, 30);
+    var newPaddle2 = new Paddle(700, 50, 150, 30);
 
     function repeatme() {
       // Clear canvas
@@ -141,8 +141,19 @@
               // Move the paddle down 
               newPaddle.y = newPaddle.y + 10;
               break;
+
+            case 104:
+              newPaddle2.y = newPaddle2.y - 10;
+              break;
+
+            case 98:
+              newPaddle2.y = newPaddle2.y + 10;
           }
         });
+
+        document.addEventListener("keydown", function(event) {
+          console.log(event.which);
+       })
 
   </script>
 </body>
