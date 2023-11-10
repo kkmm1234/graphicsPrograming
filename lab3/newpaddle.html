@@ -91,6 +91,7 @@
       }
 
       drawPaddle() {
+        //drawing paddle
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.width, this.height);
         ctx.fillStyle = "blue";
@@ -122,48 +123,51 @@
     // Start the animation loop.
     repeatme();
 
-     // Add event listeners for keypresses using jQuery
+    // Add event listeners for keypresses using jQuery
     $(document.body).on('keydown', function (e) {
-          switch (e.which) {
-            // Key code for the up arrow
-            case 38:
-              // Move the paddle up 
-              newPaddle.y -= 10;
-              break;
+      switch (e.which) {
+        // Key code for the up arrow
+        case 38:
+          // Move the paddle up 
+          newPaddle.y -= 10;
+          break;
 
-            // Key code for the down arrow
-            case 40:
-              // Move the paddle down 
-              newPaddle.y += 10;
-              break;
+        // Key code for the down arrow
+        case 40:
+          // Move the paddle down 
+          newPaddle.y += 10;
+          break;
 
-            case 104:
-              newPaddle2.y -= 10;
-              break;
+        case 104:
+          newPaddle2.y -= 10;
+          break;
 
-            case 98:
-              newPaddle2.y += 10;
-              break;
+        case 98:
+          newPaddle2.y += 10;
+          break;
 
-            case 65:
-              newBall.rotationSpeed -= .01;
-              break;
-            
-            case 68:
-              newBall.rotationSpeed += .01;
-              break;
-          }
+        case 65:
+          //change ball rotation speed
+          newBall.rotationSpeed -= .01;
+          break;
 
-          console.log(event.which);
-        });
+        case 68:
+          newBall.rotationSpeed += .01;
+          break;
+      }
 
-      canvas.addEventListener("click", function(event) {
+      console.log(event.which);
+    });
+
+    canvas.addEventListener("mousemove", function (event) {
       // Get the canvas's position relative to the window
       var canvasRect = canvas.getBoundingClientRect();
 
       // Calculate the mouse position relative to the canvas
       var mouseX = event.clientX - canvasRect.left;
       var mouseY = event.clientY - canvasRect.top;
+
+      newPaddle.y = mouseY;
     });
 
   </script>
