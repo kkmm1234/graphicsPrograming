@@ -97,11 +97,6 @@
         ctx.fill();
         ctx.closePath();
       }
-
-      movePaddle() {
-       
-       
-      }
     }
 
     var ctx = canvas.getContext("2d");
@@ -133,27 +128,43 @@
             // Key code for the up arrow
             case 38:
               // Move the paddle up 
-              newPaddle.y = newPaddle.y - 10;
+              newPaddle.y -= 10;
               break;
 
             // Key code for the down arrow
             case 40:
               // Move the paddle down 
-              newPaddle.y = newPaddle.y + 10;
+              newPaddle.y += 10;
               break;
 
             case 104:
-              newPaddle2.y = newPaddle2.y - 10;
+              newPaddle2.y -= 10;
               break;
 
             case 98:
-              newPaddle2.y = newPaddle2.y + 10;
+              newPaddle2.y += 10;
+              break;
+
+            case 65:
+              newBall.rotationSpeed -= .01;
+              break;
+            
+            case 68:
+              newBall.rotationSpeed += .01;
+              break;
           }
+
+          console.log(event.which);
         });
 
-        document.addEventListener("keydown", function(event) {
-          console.log(event.which);
-       })
+      canvas.addEventListener("click", function(event) {
+      // Get the canvas's position relative to the window
+      var canvasRect = canvas.getBoundingClientRect();
+
+      // Calculate the mouse position relative to the canvas
+      var mouseX = event.clientX - canvasRect.left;
+      var mouseY = event.clientY - canvasRect.top;
+    });
 
   </script>
 </body>
