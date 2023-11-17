@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Paddle Game</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <script type="text/javascript">
+    const canvas = document.getElementById("gameCanvas");
+    canvas.height = 600;
+    canvas.width = 800;
+
+    class Ball {
+      constructor(x, y, xspeed, yspeed, radius) {
+        this.x = x;
+        this.y = y;
+        this.xspeed = xspeed;
+        this.yspeed = yspeed;
+        this.radius = radius;
+        this.angle = 0; // Initial angle
+        this.rotationSpeed = 0.02; // Angular velocity
+        this.rotationDirection = 1; // 1 for clockwise, -1 for counter-clockwise
+      }
+      drawBall() {
+        ctx.save(); // Save the current context state
+        ctx.translate(this.x, this.y); // Translate to the ball's position
+        ctx.rotate(this.angle); // Rotate the context by the current angle
+
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        const angles = [Math.PI / 4, -Math.PI / 4, -3 * Math.PI / 4, 3 * Math.PI / 4, -5 * Math.PI / 4, 5 * Math.PI / 4];
+        const endpoints = angles.map(angle => ({
+          x: this.radius * Math.cos(angle),
+          y: this.radius * Math.sin(angle)
+        }));
+
+        for (let i = 0; i < endpoints.length; i += 2) {
+          ctx.moveTo(0, 0);
+          ctx.lineTo(endpoints[i].x, endpoints[i].y);
+          ctx.moveTo(0, 0);
+          ctx.lineTo(endpoints[i + 1].x, endpoints[i + 1].y);
+        }
+
+        ctx.stroke();
+        ctx.restore(); // Restore the saved context state
+      }
+      moveBall() {
+        // Add downwards acceleration
+        this.yspeed += 0.1; // Adjust this value to control the acceleration
+
+        this.y += this.yspeed;
+        // Check if ball hits the top or bottom
+        if (this.y > canvas.height - this.radius) {
+          // Change velocity and apply kinetic energy loss
+          this.yspeed *= -0.9;
+          this.y = canvas.height - this.radius;
+          this.rotationDirection *= -1;
+        }
+
+        this.x += this.xspeed;
+        // Check if ball hits left or right
+        if (this.x > canvas.width - this.radius || this.x < this.radius) {
+          // Change velocity to make it bounce
+          this.xspeed *= -1;
+          this.rotationDirection *= -1;
+        }
+
+        this.angle += this.rotationSpeed * this.rotationDirection;
+      }
+    }
+
+    class Paddle {
+      constructor(x, y, radius) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+      }
+
+      drawPaddle() {
+        //drawing paddle
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+
+    dectectCollision(x1, y1, x2, y2);{
+        console.log(Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2)));
+    } 
+
+    var ctx = canvas.getContext("2d");
+
+    var newBall = new Ball(250, 250, 3, 2, 20); // Adjusted the position and radius
+    var newPaddle = new Paddle(75, 275, 50);
+    var newPaddle2 = new Paddle(700, 275, 50);
+
+    function repeatme() {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      newBall.drawBall();
+      newBall.moveBall();
+
+      newPaddle.drawPaddle();
+      newPaddle2.drawPaddle();
+
+      dectectCollision(newPaddle.x, newPaddle.y, newBall.x, newBall.y);
+
+      // Get the animation going.
+      window.requestAnimationFrame(repeatme);
+    }
+
+    // Start the animation loop.
+    repeatme();
+
+    // Add event listeners for keypresses using jQuery
+    $(document.body).on('keydown', function (e) {
+      switch (e.which) {
+        // Key code for the up arrow
+        case 38:
+          // Move the paddle up 
+          newPaddle.y -= 10;
+          break;
+
+        // Key code for the down arrow
+        case 40:
+          // Move the paddle down 
+          newPaddle.y += 10;
+          break;
+
+        case 104:
+          newPaddle2.y -= 10;
+          break;
+
+        case 98:
+          newPaddle2.y += 10;
+          break;
+
+        case 65:
+          //change ball rotation speed
+          newBall.rotationSpeed -= .01;
+          break;
+
+        case 68:
+          newBall.rotationSpeed += .01;
+          break;
+      }
+
+      console.log(event.which);
+    });
+
+    canvas.addEventListener("mousemove", function (event) {
+      // Get the canvas's position relative to the window
+      var canvasRect = canvas.getBoundingClientRect();
+
+      // Calculate the mouse position relative to the canvas
+      var mouseX = event.clientX - canvasRect.left;
+      var mouseY = event.clientY - canvasRect.top;
+
+      newPaddle.y = mouseY;
+    });
+
+  </script>
+</body>
+
+</html>
