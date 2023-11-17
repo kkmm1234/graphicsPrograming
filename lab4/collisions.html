@@ -99,8 +99,12 @@
       }
     }
 
-    dectectCollision(x1, y1, x2, y2);{
+    function dectectCollision(x1, y1, x2, y2, radius1, radius2){
         console.log(Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2)));
+
+        if(Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2)) <= radius1 + radius2){
+        console.log("Collision");
+    }
     } 
 
     var ctx = canvas.getContext("2d");
@@ -119,7 +123,11 @@
       newPaddle.drawPaddle();
       newPaddle2.drawPaddle();
 
-      dectectCollision(newPaddle.x, newPaddle.y, newBall.x, newBall.y);
+      dectectCollision(newPaddle.x, newPaddle.y, newBall.x, newBall.y, newBall.radius, newPaddle.radius);
+
+      var count = 0;
+      count++;
+      console.log("COUNT:"+count);
 
       // Get the animation going.
       window.requestAnimationFrame(repeatme);
@@ -160,8 +168,7 @@
           newBall.rotationSpeed += .01;
           break;
       }
-
-      console.log(event.which);
+      console.log(event.which); 
     });
 
     canvas.addEventListener("mousemove", function (event) {
@@ -177,5 +184,4 @@
 
   </script>
 </body>
-
 </html>
