@@ -104,6 +104,11 @@
 
         if(Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2)) <= radius1 + radius2){
         console.log("Collision");
+        ctx.beginPath();
+        ctx.font = "50px serif";
+        ctx.strokeStyle = "black";
+        ctx.strokeText("COLLISION", 275, canvas.height/2)
+        ctx.stroke();
     }
     } 
 
