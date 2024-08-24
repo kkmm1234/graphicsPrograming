@@ -82,7 +82,33 @@
 
         this.angle += this.rotationSpeed * this.rotationDirection;
       }
+
+      detectCollision(paddle) {
+        //find distance of ball
+        const distance = Math.sqrt(Math.pow(this.x - paddle.x, 2) + Math.pow(this.y - paddle.y, 2));
+        return distance <= this.radius + paddle.radius;
+      }
+
+      //function to handle the ball bouncing off the paddle
+      handlePaddleCollision(paddle) {
+        //if there's a collision, reverse the ball's xspeed to bounce off
+        if (this.detectCollision(paddle)) {
+          console.log("Collision");
+          ctx.beginPath();
+          ctx.font = "50px serif";
+          ctx.strokeStyle = "black";
+          ctx.strokeText("COLLISION", 275, canvas.height/2)
+          ctx.stroke();
+          this.xspeed *= -1;
+
+          //add some variation in the yspeed based on where the ball hits the paddle
+          const offset = (this.y - paddle.y) / paddle.radius;
+          this.yspeed += offset;
+        }
+      }
     }
+
+
 
 
     //PADDLE CLASS
@@ -111,55 +137,28 @@
     var newPaddle = new Paddle(75, 275, 50);
     var newPaddle2 = new Paddle(700, 275, 50);
 
-    function dectectCollision(x1, y1, x2, y2, radius1, radius2) {
-      //find distance of ball
-      const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-      //if collision, return true
-      if (distance <= radius1 + radius2) {
-        console.log("Collision");
-        ctx.beginPath();
-        ctx.font = "50px serif";
-        ctx.strokeStyle = "black";
-        ctx.strokeText("COLLISION", 275, canvas.height/2)
-        ctx.stroke();
-        return true;
-      }
-      return false;
-    }
-
-    //function to handle the ball bouncing off the paddle
-    function handlePaddleCollision(ball, paddle) {
-      //if there's a collision, reverse the ball's xspeed to bounce off
-      if (dectectCollision(ball.x, ball.y, paddle.x, paddle.y, ball.radius, paddle.radius)) {
-        ball.xspeed *= -1;
-
-        //add some variation in the yspeed based on where the ball hits the paddle
-        const offset = (ball.y - paddle.y) / paddle.radius;
-        ball.yspeed += offset;
-      }
-    }
-
-    
-
     function repeatme() {
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       newBall.drawBall();
       newBall.moveBall();
+      newBall.handlePaddleCollision(newPaddle);
+      newBall.handlePaddleCollision(newPaddle2);
 
       newBall2.drawBall();
       newBall2.moveBall();
+      newBall2.handlePaddleCollision(newPaddle);
+      newBall2.handlePaddleCollision(newPaddle2);
 
       newBall3.drawBall();
       newBall3.moveBall();
+      newBall3.handlePaddleCollision(newPaddle);
+      newBall3.handlePaddleCollision(newPaddle2);
 
       newPaddle.drawPaddle();
       newPaddle2.drawPaddle();
 
-      //handle collisions with paddles
-      handlePaddleCollision(newBall, newPaddle);
-      handlePaddleCollision(newBall, newPaddle2);
 
       var count = 0;
       count++;
