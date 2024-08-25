@@ -9,7 +9,87 @@
     <body>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.157.0/three.min.js"></script>
         <script type="text/javascript">
-            
+
+            // Create Tetrahedron
+            class Tetrahedron {
+                constructor(scene, position, size, color, xSpeed, ySpeed, zSpeed) {
+                    this.xSpeed = xSpeed;
+                    this.ySpeed = ySpeed;
+                    this.zSpeed = zSpeed;
+                    this.elapsedTime = 0;
+
+                    this.geometry = new THREE.TetrahedronGeometry(size);
+                    this.material = new THREE.MeshLambertMaterial({ color });
+                    this.tetra = new THREE.Mesh(this.geometry, this.material);
+                    this.tetra.position.copy(position);
+
+                    this.tetra.castShadow = true;
+                    this.tetra.receiveShadow = true;
+
+                    scene.add(this.tetra);
+                }
+
+                update(deltaTime, cube) {
+                    // Apply gravity
+                    this.ySpeed -= 0.01;
+
+                    // Move Tetrahedron
+                    this.tetra.position.x += this.xSpeed;
+                    this.tetra.position.y += this.ySpeed;
+                    this.tetra.position.z += this.zSpeed;
+
+                    // Check collision with the cube and reverse direction if needed
+                    this.handleCubeCollision(cube);
+
+                    // Check collision with the plane and reverse direction if needed
+                    if (this.tetra.position.y < -2) {
+                        this.tetra.position.y = -2; // Prevent it from sinking into the plane
+                        this.ySpeed = -this.ySpeed * 0.8; // Reverse and reduce speed for bounce
+                    }
+
+                    if (this.tetra.position.x > 2 || this.tetra.position.x < -2) {
+                        this.xSpeed = -this.xSpeed;
+                    }
+
+                    if (this.tetra.position.z > 2 || this.tetra.position.z < -2) {
+                        this.zSpeed = -this.zSpeed;
+                    }
+
+                    // Rotate Tetrahedron
+                    this.tetra.rotation.x += this.xSpeed;
+                    this.tetra.rotation.y += this.ySpeed;
+
+                    
+
+                    // Update elapsed time
+                    this.elapsedTime += deltaTime;
+
+                    // Slowly change color
+                    this.material.color.set(this.getNextColor());
+                }
+
+                getNextColor() {
+                    // Interpolate between two colors (e.g., green and red)
+                    const color1 = new THREE.Color(0x00ff00); // Green
+                    const color2 = new THREE.Color(0xFF0000); // Red
+                    const mixFactor = Math.abs(Math.sin(this.elapsedTime / 10)); // Adjust the speed of color change
+
+                    // Linear interpolation (lerp) between two colors
+                    return color1.lerp(color2, mixFactor);
+                }
+
+                handleCubeCollision(cube) {
+                    const tetraBox = new THREE.Box3().setFromObject(this.tetra);
+                    const cubeBox = new THREE.Box3().setFromObject(cube);
+
+                    if (tetraBox.intersectsBox(cubeBox)) {
+                        // Reverse direction if there's a collision with the cube
+                        this.xSpeed = -this.xSpeed;
+                        this.ySpeed = -this.ySpeed * 0.8; // Reverse and reduce speed for bounce
+                    }
+                }
+            }
+
             //scene + camera + renderer
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
