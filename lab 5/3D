@@ -9,6 +9,17 @@
     <body>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.157.0/three.min.js"></script>
         <script type="text/javascript">
+            
+            //scene + camera + renderer
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
+
         </script>
     </body>
 </html>
