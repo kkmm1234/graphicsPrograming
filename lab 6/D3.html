@@ -19,7 +19,7 @@
     <script type="text/javascript">
 
         // Define the parseTime function to parse date strings
-        var parseTime = d3.timeParse("%Y-%m-%d"); // Assuming the date format is "YYYY-MM-DD"
+        var parseTime = d3.timeParse("%Y-%m-%d");
 
         // Retrieve the JSON data
         $.getJSON("https://pkgstore.datahub.io/core/co2-ppm/co2-mm-mlo_json/data/aed7eb0d19cbcd90790525d40728b0a8/co2-mm-mlo_json.json", function (data) {
@@ -49,8 +49,8 @@
                 .range([height, 0]);
 
             // Create x and y axes
-            var xAxis = d3.axisBottom(xScale).ticks(10); // Adjust the number of ticks
-            var yAxis = d3.axisLeft(yScale).ticks(5); // Adjust the number of ticks
+            var xAxis = d3.axisBottom(xScale).ticks(10);
+            var yAxis = d3.axisLeft(yScale).ticks(5);
 
             // Append SVG element
             var svg = d3.select("body")
