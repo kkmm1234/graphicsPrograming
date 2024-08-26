@@ -19,7 +19,7 @@
                     this.elapsedTime = 0;
 
                     this.geometry = new THREE.TetrahedronGeometry(size);
-                    this.material = new THREE.MeshLambertMaterial({ color });
+                    this.material = new THREE.MeshBasicMaterial({ color, wireframe: true });
                     this.tetra = new THREE.Mesh(this.geometry, this.material);
                     this.tetra.position.copy(position);
 
