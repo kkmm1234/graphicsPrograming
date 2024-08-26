@@ -26,6 +26,12 @@
                     this.tetra.castShadow = true;
                     this.tetra.receiveShadow = true;
 
+                    // Add wireframe overlay
+                    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true });
+                    const wireframeTetra = new THREE.Mesh(this.geometry, wireframeMaterial);
+                    this.tetra.add(wireframeTetra);  // Add wireframe as a child to the main tetrahedron mesh
+
+
                     scene.add(this.tetra);
                 }
 
