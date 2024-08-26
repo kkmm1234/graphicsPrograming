@@ -19,7 +19,7 @@
                     this.elapsedTime = 0;
 
                     this.geometry = new THREE.TetrahedronGeometry(size);
-                    this.material = new THREE.MeshLambertMaterial({ color});
+                    this.material = new THREE.MeshLambertMaterial({ color });
                     this.tetra = new THREE.Mesh(this.geometry, this.material);
                     this.tetra.position.copy(position);
 
@@ -29,8 +29,7 @@
                     // Add wireframe overlay
                     const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true });
                     const wireframeTetra = new THREE.Mesh(this.geometry, wireframeMaterial);
-                    this.tetra.add(wireframeTetra);  // Add wireframe as a child to the main tetrahedron mesh
-
+                    this.tetra.add(wireframeTetra);
 
                     scene.add(this.tetra);
                 }
@@ -44,6 +43,11 @@
                     this.tetra.position.y += this.ySpeed;
                     this.tetra.position.z += this.zSpeed;
 
+                    // Implement horizontal oscillation
+                    if (this.tetra.position.x > 2 || this.tetra.position.x < -2) {
+                        this.xSpeed = -this.xSpeed; // Reverse direction when hitting a boundary
+                    }
+
                     // Check collision with the cube and reverse direction if needed
                     this.handleCubeCollision(cube);
 
@@ -51,10 +55,6 @@
                     if (this.tetra.position.y < -2) {
                         this.tetra.position.y = -2; // Prevent it from sinking into the plane
                         this.ySpeed = -this.ySpeed * 0.8; // Reverse and reduce speed for bounce
-                    }
-
-                    if (this.tetra.position.x > 2 || this.tetra.position.x < -2) {
-                        this.xSpeed = -this.xSpeed;
                     }
 
                     if (this.tetra.position.z > 2 || this.tetra.position.z < -2) {
@@ -114,9 +114,14 @@
             scene.add(ambientLight);
 
             // Spot light
-            var spotLight = new THREE.SpotLight(0xffffff);
+            const spotLight = new THREE.SpotLight(0xffffff);
             spotLight.position.set(1, 0.5, 1);
+            spotLight.castShadow = true;
             scene.add(spotLight);
+
+            // Add camera helper
+            const cameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
+            scene.add(cameraHelper);
 
             // Add plane
             const planeGeometry = new THREE.PlaneGeometry(10, 10);
