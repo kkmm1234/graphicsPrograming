@@ -11,55 +11,101 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
 
     <style type="text/css">
-
+        /* Add any custom styles if needed */
     </style>
 </head>
 <body>
     <script type="text/javascript">
 
-            // Retrieve the JSON data
-            $.getJSON("https://pkgstore.datahub.io/core/co2-ppm/co2-mm-mlo_json/data/aed7eb0d19cbcd90790525d40728b0a8/co2-mm-mlo_json.json", function (data) {
-                console.log(data);
-                plotCO2Data(data);
+        // Define the parseTime function to parse date strings
+        var parseTime = d3.timeParse("%Y-%m-%d"); // Assuming the date format is "YYYY-MM-DD"
+
+        // Retrieve the JSON data
+        $.getJSON("https://pkgstore.datahub.io/core/co2-ppm/co2-mm-mlo_json/data/aed7eb0d19cbcd90790525d40728b0a8/co2-mm-mlo_json.json", function (data) {
+            console.log(data);
+            plotCO2Data(data);
+        });
+
+        // Executes once data is downloaded
+        function plotCO2Data(data) {
+            // Filter out any data points that have invalid or missing values
+            data = data.filter(function(d) {
+                return parseTime(d["Date"]) && !isNaN(d["Interpolated"]);
             });
 
-            // Executes once data is downloaded
-            function plotCO2Data(data) {
-                //SVG Width and height
-                var margin = {top: 20, right: 20, bottom: 30, left: 50},
-                    width = 960 - margin.left - margin.right,
-                    height = 500 - margin.top - margin.bottom;
+            // SVG Width and height
+            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+                width = 960 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
 
-                // Parse the time values
-                var parseTime = d3.timeParse("%Y-%m-%d");
+            // Set up x and y scales
+            var xScale = d3.scaleTime()
+                .domain(d3.extent(data, function (d) { return parseTime(d["Date"]); }))
+                .range([0, width]);
 
-                // Set up x and y scales
-                var xScale = d3.scaleTime()
-                    .domain(d3.extent(data, function (d) { return parseTime(d["Date"]); }))
-                    .range([0, width]);
+            var yScale = d3.scaleLinear()
+                .domain(d3.extent(data, function (d) { return d["Interpolated"]; }))
+                .range([height, 0]);
 
-                var yScale = d3.scaleLinear()
-                    .domain(d3.extent(data, function (d) { return d["Interpolated"]; }))
-                    .range([height, 0]);
+            // Create x and y axes
+            var xAxis = d3.axisBottom(xScale).ticks(10); // Adjust the number of ticks
+            var yAxis = d3.axisLeft(yScale).ticks(5); // Adjust the number of ticks
 
-                // Create x and y axes
-                var xAxis = d3.axisBottom(xScale).ticks(10); // Adjust the number of ticks
-                var yAxis = d3.axisLeft(yScale).ticks(5); // Adjust the number of ticks
+            // Append SVG element
+            var svg = d3.select("body")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-                // Create a line function
-                var line = d3.line()
+            // Append x and y axes
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            svg.append("g")
+                .call(yAxis);
+
+            // Append x-axis label
+            svg.append("text")
+                .attr("class", "x-axis-label")
+                .attr("x", width / 2)
+                .attr("y", height + 40)
+                .style("text-anchor", "middle")
+                .text("Time");
+
+            // Append y-axis label
+            svg.append("text")
+                .attr("class", "y-axis-label")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -height / 2)
+                .attr("y", -margin.left + 20)
+                .style("text-anchor", "middle")
+                .text("CO2 Concentration");
+
+            // Overall Title
+            svg.append("text")
+                .attr("class", "graph-title")
+                .attr("x", width / 2)
+                .attr("y", -margin.top / 2)
+                .style("text-anchor", "middle")
+                .style("font-size", "30px")
+                .text("CO2 Concentration Over Time");
+
+            // Define the line generator function
+            var line = d3.line()
                 .x(function (d) { return xScale(parseTime(d["Date"])); })
                 .y(function (d) { return yScale(d["Interpolated"]); });
 
-                var trendLine = d3.line()
-                .x(function (d) { return xScale(parseTime(d["Date"])); })
-                .y(function (d) { return yScale(d["Trend"]); });
-
-                var tempLine = d3.line()
-                .x(function (d) { return xScale(parseTime(d.date)); })
-                .y(function (d) { return yScale(d["temperature"]); });
-            }
+            // Append the line to the SVG
+            svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "#ff0000")
+                .attr("stroke-width", 1.5)
+                .attr("d", line);
+        }
     </script>
 </body>
 </html>
-
