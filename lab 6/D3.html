@@ -27,6 +27,15 @@
                 var margin = {top: 20, right: 20, bottom: 30, left: 50},
                     width = 960 - margin.left - margin.right,
                     height = 500 - margin.top - margin.bottom;
+
+                // Set up x and y scales
+                var xScale = d3.scaleTime()
+                    .domain(d3.extent(data, function (d) { return parseTime(d["Date"]); }))
+                    .range([0, width]);
+
+                var yScale = d3.scaleLinear()
+                    .domain(d3.extent(data, function (d) { return d["Interpolated"]; }))
+                    .range([height, 0]);
             }
         });
     </script>
