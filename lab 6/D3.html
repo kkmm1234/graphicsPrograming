@@ -15,6 +15,7 @@
     </style>
 </head>
 <body>
+    <h1>Keith Moffitt</h1>
     <script type="text/javascript">
 
         // Define the parseTime function to parse date strings
@@ -34,7 +35,7 @@
             });
 
             // SVG Width and height
-            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+            var margin = {top: 50, right: 20, bottom: 30, left: 50},
                 width = 960 - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
 
@@ -105,6 +106,19 @@
                 .attr("stroke", "#ff0000")
                 .attr("stroke-width", 1.5)
                 .attr("d", line);
+
+            // Define the trend line generator
+            var trendLine = d3.line()
+                .x(function(d) { return xScale(parseTime(d["Date"])); })
+                .y(function(d) { return yScale(d["Trend"]); });
+
+            // Append the trend line to the SVG
+            svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "#0000ff")
+                .attr("stroke-width", 1.5)
+                .attr("d", trendLine);
         }
     </script>
 </body>
