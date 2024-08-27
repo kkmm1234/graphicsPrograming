@@ -16,6 +16,10 @@ rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 blur3x3 = cv2.GaussianBlur(gray,(3, 3),0)
 blur13x13 = cv2.GaussianBlur(gray,(13, 13),0)
 
+# Sobel
+sobelHorizontal = cv2.Sobel(blur3x3,cv2.CV_64F,1,0,ksize=5) # x dirextion
+sobelVertical = cv2.Sobel(blur3x3,cv2.CV_64F,0,1,ksize=5) # y direction
+
 #Atu image plot
 #original image
 plt.subplot(nrows, ncols,1),plt.imshow(rgb, cmap = 'gray')
