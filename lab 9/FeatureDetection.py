@@ -32,6 +32,13 @@ for i in corners:
     x, y = int(x), int(y)  # Convert coordinates to integer
     cv2.circle(imgShiTomasi,(x,y),3,(255),-1)
 
+# Orb
+orb = cv2.ORB_create()
+kp = orb.detect(img,None)
+kp1, des1 = orb.compute(img, kp)
+
+imgOrb = cv2.drawKeypoints(img, kp, None, color=(0,255,0), flags=0)
+
 
 # GreyScale image
 plt.subplot(nrows, ncols,1),plt.imshow(gray, cmap = 'gray')
@@ -44,6 +51,10 @@ plt.title('Harris'), plt.xticks([]), plt.yticks([])
 # Tomasi Corner Detection
 plt.subplot(nrows, ncols,3),plt.imshow(cv2.cvtColor(imgShiTomasi, cv2.COLOR_BGR2RGB), cmap = 'gray')
 plt.title('ShiTomasi'), plt.xticks([]), plt.yticks([])
+
+# Orb Detection
+plt.subplot(nrows, ncols,4),plt.imshow(cv2.cvtColor(imgOrb, cv2.COLOR_BGR2RGB), cmap = 'gray')
+plt.title('Orb'), plt.xticks([]), plt.yticks([])
 
 
 plt.show()
