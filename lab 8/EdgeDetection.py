@@ -6,7 +6,7 @@ img = cv2.imread('ATU.jpg')
 
 # Rows and Columns
 nrows = 2
-ncols = 2
+ncols = 3
 
 #gray scale
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -36,5 +36,13 @@ plt.title('Blur 3x3'), plt.xticks([]), plt.yticks([])
 # Blur 13x13
 plt.subplot(nrows, ncols,4),plt.imshow(blur13x13, cmap = 'gray')
 plt.title('Blur 13x13'), plt.xticks([]), plt.yticks([])
+
+#sobelHorizontal
+plt.subplot(nrows, ncols,5),plt.imshow(sobelHorizontal, cmap = 'gray')
+plt.title('Sobel Horizontal'), plt.xticks([]), plt.yticks([])
+
+#sobelVertical 
+plt.subplot(nrows, ncols,6),plt.imshow(sobelVertical, cmap = 'gray')
+plt.title('Sobel Vertical'), plt.xticks([]), plt.yticks([])
 
 plt.show()
