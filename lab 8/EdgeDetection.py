@@ -6,7 +6,7 @@ img = cv2.imread('ATU.jpg')
 
 # Rows and Columns
 nrows = 2
-ncols = 3
+ncols = 4
 
 #gray scale
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -19,6 +19,7 @@ blur13x13 = cv2.GaussianBlur(gray,(13, 13),0)
 # Sobel
 sobelHorizontal = cv2.Sobel(blur3x3,cv2.CV_64F,1,0,ksize=5) # x dirextion
 sobelVertical = cv2.Sobel(blur3x3,cv2.CV_64F,0,1,ksize=5) # y direction
+sobelsum = sobelHorizontal + sobelVertical # Combined img
 
 #Atu image plot
 #original image
@@ -44,5 +45,9 @@ plt.title('Sobel Horizontal'), plt.xticks([]), plt.yticks([])
 #sobelVertical 
 plt.subplot(nrows, ncols,6),plt.imshow(sobelVertical, cmap = 'gray')
 plt.title('Sobel Vertical'), plt.xticks([]), plt.yticks([])
+
+#sobelsum
+plt.subplot(nrows, ncols,7),plt.imshow(sobelsum, cmap = 'gray')
+plt.title('Sobel Sum'), plt.xticks([]), plt.yticks([])
 
 plt.show()
