@@ -29,4 +29,8 @@ plt.title('Graycale'), plt.xticks([]), plt.yticks([])
 plt.subplot(nrows, ncols,3),plt.imshow(blur3x3, cmap = 'gray')
 plt.title('Blur 3x3'), plt.xticks([]), plt.yticks([])
 
+# Blur 13x13
+plt.subplot(nrows, ncols,4),plt.imshow(blur13x13, cmap = 'gray')
+plt.title('Blur 13x13'), plt.xticks([]), plt.yticks([])
+
 plt.show()
