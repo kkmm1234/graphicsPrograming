@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-img = cv2.imread('ATU.jpg')
+img = cv2.imread('space.jpg')
 
 # Rows and Columns
 nrows = 2
