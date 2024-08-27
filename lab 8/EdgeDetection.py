@@ -12,6 +12,11 @@ ncols = 1
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
+# Blur
+blur3x3 = cv2.GaussianBlur(gray,(3, 3),0)
+blur13x13 = cv2.GaussianBlur(gray,(13, 13),0)
+
+
 #original image
 plt.subplot(nrows, ncols,1),plt.imshow(rgb, cmap = 'gray')
 plt.title('Original'), plt.xticks([]), plt.yticks([])
