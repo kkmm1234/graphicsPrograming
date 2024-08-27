@@ -24,7 +24,7 @@ sobelsum = sobelHorizontal + sobelVertical # Combined img
 #Canny
 canny = cv2.Canny(blur3x3,100,200)
 
-#Atu image plot
+# Space image plot
 #original image
 plt.subplot(nrows, ncols,1),plt.imshow(rgb, cmap = 'gray')
 plt.title('Original'), plt.xticks([]), plt.yticks([])
