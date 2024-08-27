@@ -10,7 +10,7 @@ img2 = cv2.imread('building2.jpg')
 
 # Rows and Columns
 nrows = 2
-ncols = 2
+ncols = 4
 
 # Gray scale
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -56,6 +56,26 @@ matches = sorted(matches, key = lambda x:x.distance)
 # Draw first 10 matches.
 img3 = cv2.drawMatches(img,kp1,img2,kp2,matches[:10],None,flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
 
+# Spliting RGB
+M = np.asarray(img)
+
+# Tomasi
+## Detects Corners Using Tomasi
+cornersBuilding = cv2.goodFeaturesToTrack(gray,50,0.01,10)
+
+## corner plotting
+for i in cornersBuilding:
+    x,y = i.ravel()
+    x, y = int(x), int(y)  # Convert coordinates to integer
+    cv2.circle(imgShiTomasi,(x,y),3,(255),-1)
+
+# Orb
+orbBuilding = cv2.ORB_create()
+kp = orbBuilding.detect(img,None)
+kp, des = orbBuilding.compute(img, kp)
+
+imgOrbBuilding = cv2.drawKeypoints(img, kp, None, color=(0,255,0), flags=0)
+
 
 # GreyScale image
 plt.subplot(nrows, ncols,1),plt.imshow(gray, cmap = 'gray')
@@ -73,10 +93,24 @@ plt.title('ShiTomasi'), plt.xticks([]), plt.yticks([])
 plt.subplot(nrows, ncols,4),plt.imshow(cv2.cvtColor(imgOrb, cv2.COLOR_BGR2RGB), cmap = 'gray')
 plt.title('Orb'), plt.xticks([]), plt.yticks([])
 
+# RGB image
+plt.subplot(nrows, ncols,5)
+plt.imshow(M[:, :, 0], cmap='Reds', vmin=0, vmax=255)
+plt.title('Red Channel'), plt.xticks([]), plt.yticks([])
+
+plt.subplot(nrows, ncols,6)
+plt.imshow(M[:, :, 1], cmap='Greens', vmin=0, vmax=255)
+plt.title("Green Channel"), plt.xticks([]), plt.yticks([])
+
+plt.subplot(nrows, ncols,7)
+plt.imshow(M[:, :, 2], cmap='Blues', vmin=0, vmax=255)
+plt.title("Blue Channel"), plt.xticks([]), plt.yticks([])
+
 # Image Matching
 plt.figure(figsize=(6, 6))
 plt.imshow(cv2.cvtColor(img3, cv2.COLOR_BGR2RGB), cmap = 'gray')
 plt.title('Image Matching ATU'), plt.xticks([]), plt.yticks([])
+
 
 
 plt.show()
