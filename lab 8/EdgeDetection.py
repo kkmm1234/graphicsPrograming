@@ -4,9 +4,11 @@ from matplotlib import pyplot as plt
 
 img = cv2.imread('ATU.jpg')
 
+thresholds = [10, 20, 30, 40]
+
 # Rows and Columns
 nrows = 2
-ncols = 4
+ncols = 5
 
 #gray scale
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -23,6 +25,15 @@ sobelsum = sobelHorizontal + sobelVertical # Combined img
 
 #Canny
 canny = cv2.Canny(blur3x3,100,200)
+
+#loop through the thresholds and apply each to the sobel sum
+for thresh in thresholds:
+    thresholdedImage = np.zeros_like(sobelsum)
+    for i in range(sobelsum.shape[0]):
+        for j in range(sobelsum.shape[1]):
+            if sobelsum[i, j] >= thresh:
+                thresholdedImage[i, j] = 1
+
 
 #Atu image plot
 #original image
@@ -56,5 +67,9 @@ plt.title('Sobel Sum'), plt.xticks([]), plt.yticks([])
 # Canny Edge
 plt.subplot(nrows, ncols,8),plt.imshow(canny, cmap = 'gray')
 plt.title('Canny Edge'), plt.xticks([]), plt.yticks([])
+
+# Thresholded Edge
+plt.subplot(nrows, ncols,9),plt.imshow(thresholdedImage, cmap = 'gray')
+plt.title('Thresholded Edge'), plt.xticks([]), plt.yticks([])
 
 plt.show()
