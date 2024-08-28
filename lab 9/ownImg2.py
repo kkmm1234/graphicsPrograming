@@ -1,16 +1,20 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+import random as rng
+
+rng.seed(12345)
 
 img = cv2.imread('building.jpg')
 imgHarris = img.copy()
 imgShiTomasi = img.copy()
 
 img2 = cv2.imread('building2.jpg')
+img2Contours = img2.copy()
 
 # Rows and Columns
 nrows = 2
-ncols = 4
+ncols = 6
 
 # Gray scale
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -76,6 +80,29 @@ kp, des = orbBuilding.compute(img, kp)
 
 imgOrbBuilding = cv2.drawKeypoints(img, kp, None, color=(0,255,0), flags=0)
 
+# Contours
+img2ContoursGray = cv2.cvtColor(img2Contours, cv2.COLOR_BGR2GRAY)
+img2ContoursGray = cv2.blur(img2ContoursGray, (3, 3))
+
+# Canny
+canny_output = cv2.Canny(img2ContoursGray, 100, 200)
+
+# Find contours
+contours, hierarchy = cv2.findContours(canny_output, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+# Draw contours
+for i in range(len(contours)):
+    color = (rng.randint(0, 256), rng.randint(0, 256), rng.randint(0, 256))
+    cv2.drawContours(img2Contours, contours, i, color, 2, cv2.LINE_8, hierarchy, 0)
+
+# HSV
+# Convert the image from BGR to HSV
+hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+# Split the HSV image into its three channels
+H, S, V = cv2.split(hsv_img)
+
+
 
 # GreyScale image
 plt.subplot(nrows, ncols,1),plt.imshow(gray, cmap = 'gray')
@@ -106,11 +133,32 @@ plt.subplot(nrows, ncols,7)
 plt.imshow(M[:, :, 2], cmap='Blues', vmin=0, vmax=255)
 plt.title("Blue Channel"), plt.xticks([]), plt.yticks([])
 
+# Contours
+plt.subplot(nrows, ncols, 8), plt.imshow(cv2.cvtColor(img2Contours, cv2.COLOR_BGR2RGB))
+plt.title('Contours'), plt.xticks([]), plt.yticks([])
+
+# HSV
+# Hue channel
+plt.subplot(nrows, ncols, 9)
+plt.imshow(H, cmap='gray')
+plt.title('Hue Channel')
+plt.axis('off')
+
+# Saturation channel
+plt.subplot(nrows, ncols, 10)
+plt.imshow(S, cmap='gray')
+plt.title('Saturation Channel')
+plt.axis('off')
+
+# Value channel
+plt.subplot(nrows, ncols, 11)
+plt.imshow(V, cmap='gray')
+plt.title('Value Channel')
+plt.axis('off')
+
 # Image Matching
 plt.figure(figsize=(6, 6))
 plt.imshow(cv2.cvtColor(img3, cv2.COLOR_BGR2RGB), cmap = 'gray')
 plt.title('Image Matching ATU'), plt.xticks([]), plt.yticks([])
-
-
 
 plt.show()
